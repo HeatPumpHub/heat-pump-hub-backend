@@ -19,6 +19,17 @@ enum UserStatus {
   BANNED
 }
 
+enum ItemCategory {
+  OUTDOOR_UNIT
+  INDOOR_UNIT
+  HYDROBOX
+  CONTROLLER
+  HOT_WATER_CYLINDER
+  BUFFER_VESSEL
+  CIRCULATION_PUMP
+  ACCESSORY
+}
+
 model User {
 
 id String @id @default(uuid())
@@ -30,7 +41,45 @@ avatar String?
 role Role 
 roleSpecificCharacteristics Json
 status UserStatus @default(ACTIVE)
+buildingAssessments BuildingAssessment[]
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
+
+@@map("users")
+
+}
+model Item {
+
+id String @id @default(uuid())
+name String @unique
+brand String
+price Decimal @db.Decimal(10, 2)
+image String
+description String
+warranty Int
+manufacturerNumber String @unique
+category ItemCategory
+categorySpecificCharacteristics Json
+isArchived Boolean @default(false)
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+@@map("items")
+
+}
+
+model BuildingAssessment {
+
+  id String @id @default(uuid())
+  name String
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  manualInputData Json
+  manualCalculatedPower Float
+  manualCalculatedDHWVolume Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("building_assessments")
 
 }
