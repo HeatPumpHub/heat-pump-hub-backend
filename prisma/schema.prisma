@@ -30,6 +30,12 @@ enum ItemCategory {
   ACCESSORY
 }
 
+enum OfferStatus {
+  ACTIVE
+  EXPIRED
+  ARCHIVED
+}
+
 model User {
 
 id String @id @default(uuid())
@@ -42,6 +48,7 @@ role Role
 roleSpecificCharacteristics Json
 status UserStatus @default(ACTIVE)
 buildingAssessments BuildingAssessment[]
+offers Offer[]
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 
@@ -61,6 +68,7 @@ manufacturerNumber String @unique
 category ItemCategory
 categorySpecificCharacteristics Json
 isArchived Boolean @default(false)
+combinationItems CombinationItem[]
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 
@@ -77,9 +85,62 @@ model BuildingAssessment {
   manualInputData Json
   manualCalculatedPower Float
   manualCalculatedDHWVolume Int
+  isArchived Boolean @default(false)
+  offers Offer[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("building_assessments")
+
+}
+
+model Combination {
+
+  id String @id @default(uuid())
+  name String
+  isArchived Boolean @default(false)
+  combinationItems CombinationItem[]
+  offers Offer[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("combinations")
+
+}
+
+model CombinationItem {
+
+  id String @id @default(uuid())
+  combinationId String
+  combination Combination @relation(fields: [combinationId], references: [id])
+  itemId String
+  item Item @relation(fields: [itemId], references: [id])
+  quantity Int @default(1) 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([combinationId, itemId])
+  @@map("combination_items")
+
+}
+
+model Offer {
+
+  id String @id @default(uuid())
+  userId String
+  buildingAssessmentId String
+  combinationId String
+  offerSnapshot Json
+  price Decimal @db.Decimal(10, 2)
+  discount Int @default(0) @db.SmallInt
+  status OfferStatus @default(ACTIVE)
+  expirationDate DateTime
+  user User @relation(fields: [userId], references: [id])
+  buildingAssessment BuildingAssessment @relation(fields: [buildingAssessmentId], references: [id])
+  combination Combination @relation(fields: [combinationId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("offers")
 
 }
