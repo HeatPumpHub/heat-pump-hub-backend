@@ -14,6 +14,6 @@ export const errorHandler = (
         status: statusCode >= 500 ? 'error' : 'fault',
         statusCode,
         message,
-        ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+        ...(process.env.NODE_ENV === 'development' && { stack: err?.stack })
     });
 };
