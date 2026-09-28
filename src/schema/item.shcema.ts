@@ -1,5 +1,6 @@
 import { ItemCategory } from "@prisma/client";
-import { any, boolean, json, nativeEnum, number, object, record, string } from "zod";
+import { any, boolean, z, number, object, record, string, infer } from "zod";
+import { TypeOf } from "zod/v3";
 
 const payload = {
     body: object({
@@ -19,14 +20,14 @@ const payload = {
             message: 'Description is required'
         }),        
         warranty: number({
-  message: 'Warranty duration is required',
-})
-  .int('Warranty must be an integer')
-  .positive('Warranty duration must be positive number'),
+            message: 'Warranty duration is required',
+            })
+            .int('Warranty must be an integer')
+            .positive('Warranty duration must be positive number'),
         manufacturerNumber: string({
             message: 'Manufacturer number is required'
         }),
-        category: nativeEnum(ItemCategory, {
+        category: z.enum(ItemCategory, {
             message: 'Category is required',
             }),
         categorySpecificCharacteristics: record(string(), any(), {
@@ -38,3 +39,33 @@ const payload = {
         
     })
 }
+
+const params = {
+    params: object({
+        id: string({
+            message: 'ID is required'
+        })
+    })
+}
+
+export const createItemSchema = object({
+    ...payload
+})
+
+export const updateItemSchema = object({
+    ...payload,
+    ...params
+})
+
+export const getItemSchema = object({
+    ...params
+})
+
+export const deleteItemSchema = object({
+    ...params
+})
+
+export type CreateItemInput = z.infer<typeof createItemSchema>
+export type UpdateItemInput = z.infer<typeof updateItemSchema>
+export type GetItemInput = z.infer<typeof getItemSchema>
+export type DeleteItemInput = z.infer<typeof deleteItemSchema>
