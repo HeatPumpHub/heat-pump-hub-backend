@@ -1,6 +1,5 @@
 import { ItemCategory } from "@prisma/client";
-import { any, boolean, z, number, object, record, string, infer } from "zod";
-import { TypeOf } from "zod/v3";
+import { any, boolean, z, number, object, record, string } from "zod";
 
 const payload = {
     body: object({
@@ -27,7 +26,7 @@ const payload = {
         manufacturerNumber: string({
             message: 'Manufacturer number is required'
         }),
-        category: z.enum(ItemCategory, {
+        category: z.enum(Object.values(ItemCategory) as [string, ...string[]], {
             message: 'Category is required',
             }),
         categorySpecificCharacteristics: record(string(), any(), {
