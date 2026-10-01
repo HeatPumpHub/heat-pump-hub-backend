@@ -7,3 +7,31 @@ export async function createItem(input: CreateItemInput['body']) {
         data: input as Prisma.ItemCreateInput
     })
 }
+
+export async function getItems(where?: Prisma.ItemWhereInput) {
+    return prisma.item.findMany({
+        where,
+    })
+}
+
+export async function getItemById(where: Prisma.ItemWhereUniqueInput) {
+    return prisma.item.findUnique({
+        where,
+    })
+}
+
+export async function updateItem(where: Prisma.ItemWhereUniqueInput, data: UpdateItemInput['body']) {
+    return prisma.item.update({
+        where,
+        data: data as Prisma.ItemUpdateInput
+    })
+}
+
+export async function deleteItem(where: Prisma.ItemWhereUniqueInput) {
+  return prisma.item.update({
+    where,
+    data: {
+      status: 'ARCHIVED', 
+    },
+  });
+}
