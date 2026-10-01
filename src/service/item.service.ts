@@ -10,7 +10,10 @@ export async function createItem(input: CreateItemInput['body']) {
 
 export async function getItems(where?: Prisma.ItemWhereInput) {
     return prisma.item.findMany({
-        where,
+        where: {
+            ...where,
+            isArchived: where?.isArchived ?? false
+        }
     })
 }
 
@@ -31,7 +34,7 @@ export async function deleteItem(where: Prisma.ItemWhereUniqueInput) {
   return prisma.item.update({
     where,
     data: {
-      status: 'ARCHIVED', 
+      isArchived: true 
     },
   });
 }
