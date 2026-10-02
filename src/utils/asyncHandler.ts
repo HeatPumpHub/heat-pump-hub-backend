@@ -1,13 +1,13 @@
-import { Request, Response, NextFunction, RequestHandler } from "express";
+import { Request, Response, NextFunction } from 'express';
 
-type AsyncController = (
-    req: Request,
-    res: Response,
+export const asyncHandler = <P = any, ResBody = any, ReqBody = any, ReqQuery = any>(
+  fn: (
+    req: Request<P, ResBody, ReqBody, ReqQuery>,
+    res: Response<ResBody>,
     next: NextFunction
-) => Promise<any>
-
-export const asyncHandler = (fn: AsyncController) => {
-    return (req: Request, res: Response, next: NextFunction) => {
-        Promise.resolve(fn(req, res, next)).catch(next)
-    }
-}
+  ) => Promise<any>
+) => {
+  return (req: Request<P, ResBody, ReqBody, ReqQuery>, res: Response<ResBody>, next: NextFunction) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };
+};
