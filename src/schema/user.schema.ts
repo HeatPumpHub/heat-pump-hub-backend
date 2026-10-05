@@ -27,3 +27,11 @@ const payload = {
         })
     }),
 }
+
+const params = {
+    params: object({
+        id: string({
+            message: 'ID is required'
+        })
+    })
+}
