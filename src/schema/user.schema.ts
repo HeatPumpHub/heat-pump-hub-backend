@@ -35,3 +35,25 @@ const params = {
         })
     })
 }
+
+export const createUserSchema = object({
+    ...payload
+})
+
+export const updateUserSchema = object({
+    ...payload,
+    ...params
+})
+
+export const getUserSchema = object({
+    ...params
+})
+
+export const deleteUserSchema = object({
+    ...params
+})
+
+export type CreateUserInput = z.infer<typeof createUserSchema>
+export type UpdateUserInput = z.infer<typeof updateUserSchema>
+export type GetUserInput = z.infer<typeof getUserSchema>
+export type DeleteUserInput = z.infer<typeof deleteUserSchema>
