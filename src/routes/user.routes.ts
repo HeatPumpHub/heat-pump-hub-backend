@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import { createUserSchema, getUserSchema, updateUserSchema, deleteUserSchema } from '../schema/user.schema.js';
 import validateResource from '../middleware/validateResource.middleware.js';
+import { createUserHandler, deleteUserHandler, getUserByIdHandler, updateUserHandler } from '../controller/user.controller.js';
+import { getItemsHandler } from '../controller/item.controller.js';
 
 const userRouter = Router();
-
 
 userRouter.post(
   '/',
@@ -13,7 +14,7 @@ userRouter.post(
 
 userRouter.get(
   '/',
-  getUserHandler
+  getItemsHandler
 );
 
 userRouter.get(
