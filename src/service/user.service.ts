@@ -4,7 +4,7 @@ import { CreateUserInput, UpdateUserInput } from '../schema/user.schema.js';
 
 export async function createUser(input: CreateUserInput['body']) {
   return prisma.user.create({
-    data: input as unknown as Prisma.UserCreateInput,
+    data: input as Prisma.UserCreateInput,
   });
 }
 
@@ -29,7 +29,7 @@ export async function updateUser(
 ) {
   return prisma.user.update({
     where,
-    data: data as unknown as Prisma.UserUpdateInput,
+    data: data as Prisma.UserUpdateInput,
   });
 }
 
