@@ -12,8 +12,8 @@ export const createItemHandler = asyncHandler(
 
 export const getItemsHandler = asyncHandler(
     async (req: Request, res: Response) => {
-        const item = await getItems()
-        return res.status(200).json(item)
+        const items = await getItems()
+        return res.status(200).json(items)
     }
 )
 
