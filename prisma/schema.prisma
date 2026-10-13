@@ -85,7 +85,7 @@ model BuildingAssessment {
   user User @relation(fields: [userId], references: [id])
   manualInputData Json
   manualCalculatedPower Float
-  manualCalculatedDHWVolume Int
+  manualCalculatedDHWVolume Int?
   isArchived Boolean @default(false)
   offers Offer[]
   createdAt DateTime @default(now())
