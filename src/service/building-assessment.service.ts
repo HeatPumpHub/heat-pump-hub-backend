@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { CreateBuildingAssessmentInput, UpdateBuildingAssessmentInput } from "../schema/buildingAssessment.schema.js";
+import { CreateBuildingAssessmentInput, UpdateBuildingAssessmentInput } from "../schema/building-assessment.schema.js";
 import { prisma } from "../utils/prisma.js";
 
 
