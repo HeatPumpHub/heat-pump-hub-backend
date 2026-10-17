@@ -1,5 +1,5 @@
 import { Router } from "express";
-import validateResource from "../middleware/validateResource.middleware.js";
+import validateResource from "../middleware/validate-resource.middleware.js";
 import { createItemSchema, deleteItemSchema, getItemSchema, updateItemSchema } from "../schema/item.schema.js";
 import { createItemHandler, deleteItemHandler, getItemByIdHandler, getItemsHandler, updateItemHandler } from "../controller/item.controller.js";
 

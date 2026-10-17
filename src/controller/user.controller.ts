@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from '../utils/asyncHandler.js';
+import { asyncHandler } from '../utils/async-handler.js';
 import { CreateUserInput, GetUserInput, UpdateUserInput,DeleteUserInput } from '../schema/user.schema.js';
 import { createUser, getUsers, getUserById, updateUser, deleteUser,} from '../service/user.service.js';
 

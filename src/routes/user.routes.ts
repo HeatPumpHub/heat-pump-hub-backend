@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { createUserSchema, getUserSchema, updateUserSchema, deleteUserSchema } from '../schema/user.schema.js';
-import validateResource from '../middleware/validateResource.middleware.js';
+import validateResource from '../middleware/validate-resource.middleware.js';
 import { createUserHandler, deleteUserHandler, getUserByIdHandler, updateUserHandler } from '../controller/user.controller.js';
 import { getItemsHandler } from '../controller/item.controller.js';
 
