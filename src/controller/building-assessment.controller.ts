@@ -42,7 +42,7 @@ export const updateBuildingAssessmentHandler = asyncHandler(
     }
 )
 
-export const deleteUserHandler = asyncHandler(
+export const deleteBuildingAssessmentHandler = asyncHandler(
     async (
         req: Request<DeleteBuildingAssessmentInput['params']>,
         res: Response
