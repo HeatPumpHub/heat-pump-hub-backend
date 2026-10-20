@@ -20,20 +20,20 @@ const params = {
     })
 }
 
-const createCombinationSchema = object({
+export const createCombinationSchema = object({
     ...payload
 })
 
-const updateCombinationSchema = object({
+export const updateCombinationSchema = object({
     ...payload,
     ...params
 })
 
-const getCombinationSchema = object({
+export const getCombinationSchema = object({
     ...params
 })
 
-const deleteCombinationSchema = object({
+export const deleteCombinationSchema = object({
     ...params
 })
 
