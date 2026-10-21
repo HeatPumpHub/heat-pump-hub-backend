@@ -1,4 +1,4 @@
-import z, { int, number, object, string } from "zod";
+import z, { number, object, string } from "zod";
 
 
 const payload = {
