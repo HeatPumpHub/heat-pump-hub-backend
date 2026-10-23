@@ -28,7 +28,7 @@ export const getCombinationItemByIDHandler = asyncHandler(
     }
 )
 
-export const updateCombinationHandler = asyncHandler(
+export const updateCombinationItemHandler = asyncHandler(
     async(req: Request<UpdateCombinationItemInput['params'], {}, UpdateCombinationItemInput['body']>, res: Response) => {
         const existingCombinationItem = await getCombinationItemByID({id: req.params.id})
 
