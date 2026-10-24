@@ -49,7 +49,7 @@ export const deleteOfferSchema = object({
     ...params
 })
 
-export type CreateOfferSchema = z.infer<typeof createOfferSchema>
-export type GetOfferSchema = z.infer<typeof getOfferSchema>
-export type UpdateOfferSchema = z.infer<typeof updateOfferSchema>
-export type DeleteOfferSchema = z.infer<typeof deleteOfferSchema>
+export type CreateOfferInput = z.infer<typeof createOfferSchema>
+export type GetOfferInput = z.infer<typeof getOfferSchema>
+export type UpdateOfferInput = z.infer<typeof updateOfferSchema>
+export type DeleteOfferInput = z.infer<typeof deleteOfferSchema>
