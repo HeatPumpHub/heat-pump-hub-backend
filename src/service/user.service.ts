@@ -1,5 +1,5 @@
 import { prisma } from '../utils/prisma.js';
-import { Prisma } from '@prisma/client';
+import { Prisma, UserStatus } from '@prisma/client';
 import { CreateUserInput, UpdateUserInput } from '../schema/user.schema.js';
 
 export async function createUser(input: CreateUserInput['body']) {
@@ -12,7 +12,7 @@ export async function getUsers(where?: Prisma.UserWhereInput) {
   return prisma.user.findMany({
     where: {
       ...where,
-      status: where?.status ?? 'ACTIVE',
+      status: where?.status ?? UserStatus.ACTIVE,
     },
   });
 }
