@@ -2,7 +2,7 @@ import { OfferStatus } from "@prisma/client";
 import z, { any, date, number, object, record, string } from "zod";
 
 
-export const payload = object({
+export const payload = {
     body: object({
         offerSnapshot: record(string(), any(), {
             message: 'Offer snapshot is required'
@@ -23,7 +23,8 @@ export const payload = object({
             message: 'Expiration date is required'
         })
     })
-})
+}
+
 const params = {
     params: object({
         id: string({
