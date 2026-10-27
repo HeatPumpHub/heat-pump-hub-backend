@@ -1,14 +1,30 @@
-import z, { any, boolean, number, object, record, string } from "zod";
+import z, { any, boolean, int, number, object, record, string } from "zod";
+import { buildingTypeEnum, climateZoneEnum, installationTypeEnum } from "../constants/hvac.constants.js";
 
+export const manualInputDataSchema = object({
+    buildingType: z.enum(Object.values(buildingTypeEnum) as [string, ...string[]], {
+        message: 'Building type is required'
+    }),
+    isTopOrBottomFloor: boolean().default(false),
+    area: number({
+        message: 'Area is required'
+    }).int('Area must be an integer').positive('Area must be positive number'),
+    insulationWidth: number().int('Insulation width must be an integer').nonnegative().default(0),
+    installationType: z.enum(Object.values(installationTypeEnum) as [string, ...string[]], {
+        message: 'Installation type is required'
+    }),
+    climateZone: z.enum(Object.values(climateZoneEnum) as [string, ...string[]], {
+        message: 'Climate zone is required'
+    }),
+    nearWater: boolean().default(false)
+})
 
 const payload = {
     body: object({
         name: string({
             message: 'Name is required'
         }),
-        manualInputData: record(string(), any(), {
-            message: 'Manual input data is required'
-        }),
+        manualInputData: manualInputDataSchema,
         manualCalculatedPower: number({
             message: 'Manual calculated power is required'
         }).positive('Manual calculated power must be positive number'),
