@@ -20,4 +20,4 @@ export const installationTypeEnum = {
     RADIATORS: 'RADIATORS'
 }
 
-export type installationTypeEnum = keyof typeof installationTypeEnum
+export type installationType = keyof typeof installationTypeEnum

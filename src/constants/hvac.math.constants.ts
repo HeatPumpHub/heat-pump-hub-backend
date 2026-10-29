@@ -15,6 +15,6 @@ export const APARTMENT_BASE_THERMAL_LOADS = {
 } as const
 
 export const HVAC_MODIFIERS = {
-    TOP_OR_BOTTOM_FLOOR: 0.12,
+    TOP_OR_BOTTOM_FLOOR: 1.12,
     NEAR_WATER: 1.08
 } as const
