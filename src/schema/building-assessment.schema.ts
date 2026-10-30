@@ -16,7 +16,9 @@ export const manualInputDataSchema = object({
     climateZone: z.enum(Object.values(climateZoneEnum) as [string, ...string[]], {
         message: 'Climate zone is required'
     }),
-    nearWater: boolean().default(false)
+    nearWater: boolean().default(false),
+    baths: number().int('Number of baths must be integer').nonnegative().optional(),
+    habitants: number().int('Number of habitants must be integer').nonnegative().optional()
 })
 
 const payload = {
