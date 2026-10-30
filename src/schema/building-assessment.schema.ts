@@ -1,8 +1,8 @@
 import z, { any, boolean, int, number, object, record, string } from "zod";
-import { buildingTypeEnum, climateZoneEnum, installationTypeEnum } from "../constants/hvac.constants.js";
+import { BuildingType, buildingTypeEnum, climateZoneEnum, ClimateZoneType, installationType, installationTypeEnum } from "../constants/hvac.constants.js";
 
 export const manualInputDataSchema = object({
-    buildingType: z.enum(Object.values(buildingTypeEnum) as [string, ...string[]], {
+    buildingType: z.enum(Object.values(buildingTypeEnum) as [BuildingType, ...BuildingType[]], {
         message: 'Building type is required'
     }),
     isTopOrBottomFloor: boolean().default(false),
@@ -10,10 +10,10 @@ export const manualInputDataSchema = object({
         message: 'Area is required'
     }).int('Area must be an integer').positive('Area must be positive number'),
     insulationWidth: number().int('Insulation width must be an integer').nonnegative().default(0),
-    installationType: z.enum(Object.values(installationTypeEnum) as [string, ...string[]], {
+    installationType: z.enum(Object.values(installationTypeEnum) as [installationType, ...installationType[]], {
         message: 'Installation type is required'
     }),
-    climateZone: z.enum(Object.values(climateZoneEnum) as [string, ...string[]], {
+    climateZone: z.enum(Object.values(climateZoneEnum) as [ClimateZoneType, ...ClimateZoneType[]], {
         message: 'Climate zone is required'
     }),
     nearWater: boolean().default(false),
