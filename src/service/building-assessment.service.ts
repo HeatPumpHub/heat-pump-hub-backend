@@ -3,9 +3,14 @@ import { CreateBuildingAssessmentInput, UpdateBuildingAssessmentInput } from "..
 import { prisma } from "../utils/prisma.js";
 
 
-export async function createBuildingAssessment(input: CreateBuildingAssessmentInput['body']) {
+export async function createBuildingAssessment(input: CreateBuildingAssessmentInput['body'], userId: string) {
     return prisma.buildingAssessment.create({
-        data: input as Prisma.BuildingAssessmentCreateInput
+        data: {
+            ...input,
+            user: {
+                connect: { id: userId }
+            }
+        }
     })
 }
 
