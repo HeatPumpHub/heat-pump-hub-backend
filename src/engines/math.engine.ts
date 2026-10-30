@@ -1,6 +1,7 @@
 import { BuildingType, buildingTypeEnum, ClimateZoneType } from "../constants/hvac.constants.js"
-import { APARTMENT_BASE_THERMAL_LOADS, HOUSE_BASE_THERMAL_LOADS } from "../constants/hvac.math.constants.js"
+import { APARTMENT_BASE_THERMAL_LOADS, HOUSE_BASE_THERMAL_LOADS, HVAC_MODIFIERS } from "../constants/hvac.math.constants.js"
 import { AppError } from "../errors/app.error.js"
+import { ManualInputDataType } from "../schema/building-assessment.schema.js"
 
 
 function calculateInsulationCoefficient(insulationWidth: number): number {
@@ -22,4 +23,20 @@ function getBaseThermalLoad(buildingType: BuildingType, climateZone: ClimateZone
     }
     
     throw new AppError(`Unsupported building type: ${buildingType}`, 400)
+}
+
+export function calculateRequiredPower(input: ManualInputDataType): number {
+
+    const baseLoadPerSquareMeter = getBaseThermalLoad(input.buildingType, input.climateZone)
+
+    const basePower = input.area * baseLoadPerSquareMeter
+
+    const insulationCoefficient = calculateInsulationCoefficient(input.insulationWidth)
+    let adjustedPower = basePower * insulationCoefficient
+
+    if(input.isTopOrBottomFloor) adjustedPower *= HVAC_MODIFIERS.TOP_OR_BOTTOM_FLOOR
+
+    if(input.nearWater) adjustedPower *= HVAC_MODIFIERS.NEAR_WATER
+
+    return Math.round(adjustedPower)
 }
