@@ -69,3 +69,4 @@ export type CreateBuildingAssessmentInput = z.infer<typeof createBuildingAssessm
 export type UpdateBuildingAssessmentInput = z.infer<typeof updateBuildingAssessmentSchema>
 export type GetBuildingAssessmentInput = z.infer<typeof getBuildingAssessmentSchema>
 export type DeleteBuildingAssessmentInput = z.infer<typeof deleteBuildingAssessmentSchema>
+export type ManualInputDataType = z.infer<typeof manualInputDataSchema>
