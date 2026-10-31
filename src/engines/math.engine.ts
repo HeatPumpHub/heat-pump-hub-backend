@@ -1,5 +1,5 @@
 import { BuildingType, buildingTypeEnum, ClimateZoneType } from "../constants/hvac.constants.js"
-import { APARTMENT_BASE_THERMAL_LOADS, HOUSE_BASE_THERMAL_LOADS, HVAC_MODIFIERS } from "../constants/hvac.math.constants.js"
+import { APARTMENT_BASE_THERMAL_LOADS, HOUSE_BASE_THERMAL_LOADS, HVAC_MODIFIERS, DHW_CALCULATION_CONSTANTS } from "../constants/hvac.math.constants.js"
 import { AppError } from "../errors/app.error.js"
 import { ManualInputDataType } from "../schema/building-assessment.schema.js"
 
@@ -39,4 +39,17 @@ export function calculateRequiredPower(input: ManualInputDataType): number {
     if(input.nearWater) adjustedPower *= HVAC_MODIFIERS.NEAR_WATER
 
     return Math.round(adjustedPower)
+}
+
+export function calculateDHWVolume(input: ManualInputDataType): number | null {
+
+    if(!input.baths) return null
+
+    let calculatedVolume = input.baths * DHW_CALCULATION_CONSTANTS.LITTERS_PER_BATH * DHW_CALCULATION_CONSTANTS.CONCURRENCY_FACTOR
+
+    if(input.habitants && input.habitants > 0) {
+        const volumeByHabitants = input.habitants * DHW_CALCULATION_CONSTANTS.LITTERS_PER_HABITANT
+        calculatedVolume = Math.max(calculatedVolume, volumeByHabitants)
+    }
+    return calculatedVolume
 }
