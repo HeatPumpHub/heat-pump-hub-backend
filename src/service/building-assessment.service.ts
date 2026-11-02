@@ -1,12 +1,19 @@
 import { Prisma } from "@prisma/client";
 import { CreateBuildingAssessmentInput, UpdateBuildingAssessmentInput } from "../schema/building-assessment.schema.js";
 import { prisma } from "../utils/prisma.js";
+import { calculateDHWVolume, calculateRequiredPower } from "../engines/math.engine.js";
 
 
 export async function createBuildingAssessment(input: CreateBuildingAssessmentInput['body'], userId: string) {
+
+    const manualCalculatedPower = calculateRequiredPower(input.manualInputData)
+    const calculatedDHWVolume = calculateDHWVolume(input.manualInputData)
+
     return prisma.buildingAssessment.create({
         data: {
             ...input,
+            manualCalculatedPower,
+            manualCalculatedDHWVolume: calculatedDHWVolume,
             user: {
                 connect: { id: userId }
             }
