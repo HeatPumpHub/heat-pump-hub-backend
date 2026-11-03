@@ -1,4 +1,4 @@
-import { BuildingType, buildingTypeEnum, ClimateZoneType } from "../constants/hvac.constants.js"
+import { BUFFER_TANK_CHARACTERISTICS, BuildingType, buildingTypeEnum, ClimateZoneType } from "../constants/hvac.constants.js"
 import { APARTMENT_BASE_THERMAL_LOADS, HOUSE_BASE_THERMAL_LOADS, HVAC_MODIFIERS, DHW_CALCULATION_CONSTANTS } from "../constants/hvac.math.constants.js"
 import { AppError } from "../errors/app.error.js"
 import { ManualInputDataType } from "../schema/building-assessment.schema.js"
@@ -52,4 +52,12 @@ export function calculateDHWVolume(input: ManualInputDataType): number | null {
         calculatedVolume = Math.max(calculatedVolume, volumeByHabitants)
     }
     return calculatedVolume
+}
+
+export function calculateBufferTankVolume(requiredPower: number): number {
+    if(!requiredPower || requiredPower <= 0) return 0
+
+    const bufferTankVolume = requiredPower * BUFFER_TANK_CHARACTERISTICS.LITTERS_PER_KW
+
+    return Math.round(bufferTankVolume)
 }

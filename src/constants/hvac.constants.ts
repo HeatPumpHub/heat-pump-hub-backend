@@ -21,3 +21,7 @@ export const installationTypeEnum = {
 }
 
 export type installationType = keyof typeof installationTypeEnum
+
+export const BUFFER_TANK_CHARACTERISTICS = {
+    LITTERS_PER_KW: 10
+} as const
