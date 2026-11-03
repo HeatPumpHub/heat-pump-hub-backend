@@ -84,7 +84,7 @@ model BuildingAssessment {
   userId String
   user User @relation(fields: [userId], references: [id])
   manualInputData Json
-  manualCalculatedPower Float
+  manualCalculatedPower Decimal @db.Decimal(10,2)
   manualCalculatedDHWVolume Int?
   isArchived Boolean @default(false)
   offers Offer[]
