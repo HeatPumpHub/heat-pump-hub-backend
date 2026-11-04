@@ -1,6 +1,49 @@
 import { ItemCategory } from "@prisma/client";
 import { any, boolean, z, number, object, record, string } from "zod";
 
+export const outdoorUnitSchema = object({
+    nominalPower: number({
+        message: 'Nominal power is required'
+    }).positive('Nominal power must be positive'),
+    refrigerantType: string({
+        message: 'Refrigerant type is required'
+    }),
+    electricalConnection: string({
+        message: 'Electrical connection is required'
+    })
+})
+
+export const indoorUnitSchema = object({
+    refrigerantType: string({
+        message: 'Refrigerant type is required'
+    }),
+    electricalConnection: string({
+        message: 'Electrical connection is required'
+    }),
+    hotWaterCylinderVolume: number().int().positive(),
+    material: string({
+        message: 'Material is required'
+    })
+})
+
+export const hotWaterCylinderSchema = object({
+    volume: number().int().positive(),
+    material: string({
+        message: 'Material is required'
+    }),
+    electricalHeaterPower: number().int().positive(),
+    electricalConnection: string({
+        message: 'Electrical connection is required'
+    })
+})
+
+export const bufferTankSchema = object({
+    volume: number().int().positive(),
+    material: string({
+        message: 'Material is required'
+    })
+})
+
 const payload = {
     body: object({
         name: string({
