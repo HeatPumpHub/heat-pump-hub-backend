@@ -20,9 +20,18 @@ export const indoorUnitSchema = object({
     electricalConnection: string({
         message: 'Electrical connection is required'
     }),
-    hotWaterCylinderVolume: number().int().positive(),
-    material: string({
+    hotWaterCylinderVolume: number().int().positive().optional(),
+    hotWaterCylinderMaterial: string({
         message: 'Material is required'
+    })
+})
+
+export const hydroboxSchema = object({
+    refrigerantType: string({
+        message: 'Refrigerant type is required'
+    }),
+    electricalConnection: string({
+        message: 'Electrical connection is required'
     })
 })
 
@@ -44,8 +53,7 @@ export const bufferTankSchema = object({
     })
 })
 
-const payload = {
-    body: object({
+const baseItemPayload = object({
         name: string({
             message: 'Name is required'
         }),
@@ -69,17 +77,34 @@ const payload = {
         manufacturerNumber: string({
             message: 'Manufacturer number is required'
         }),
-        category: z.enum(Object.values(ItemCategory) as [string, ...string[]], {
-            message: 'Category is required',
-            }),
-        categorySpecificCharacteristics: record(string(), any(), {
-            message: 'Category specific characteristics are required',
-            }),
         isArchived: boolean({
             message: 'Is archived value is required'
         }).default(false)
-        
     })
+
+const payload = {
+    body: z.discriminatedUnion('category', [
+        baseItemPayload.extend({
+            category: z.literal(ItemCategory.OUTDOOR_UNIT),
+            categorySpecificCharacteristics: outdoorUnitSchema
+        }),
+        baseItemPayload.extend({
+            category: z.literal(ItemCategory.INDOOR_UNIT),
+            categorySpecificCharacteristics: indoorUnitSchema
+        }),
+        baseItemPayload.extend({
+            category: z.literal(ItemCategory.HYDROBOX),
+            categorySpecificCharacteristics: hydroboxSchema
+        }),
+        baseItemPayload.extend({
+            category: z.literal(ItemCategory.HOT_WATER_CYLINDER),
+            categorySpecificCharacteristics: hotWaterCylinderSchema
+        }),
+        baseItemPayload.extend({
+            category: z.literal(ItemCategory.BUFFER_TANK),
+            categorySpecificCharacteristics: bufferTankSchema
+        })
+    ])
 }
 
 const params = {
