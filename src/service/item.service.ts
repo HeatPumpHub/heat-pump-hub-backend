@@ -4,7 +4,7 @@ import { CreateItemInput, UpdateItemInput } from '../schema/item.schema.js';
 
 export async function createItem(input: CreateItemInput['body']) {
     return prisma.item.create({ 
-        data: input as Prisma.ItemCreateInput
+        data: input as unknown as Prisma.ItemCreateInput
     })
 }
 
@@ -26,7 +26,7 @@ export async function getItemById(where: Prisma.ItemWhereUniqueInput) {
 export async function updateItem(where: Prisma.ItemWhereUniqueInput, data: UpdateItemInput['body']) {
     return prisma.item.update({
         where,
-        data: data as Prisma.ItemUpdateInput
+        data: data as unknown as Prisma.ItemUpdateInput
     })
 }
 
