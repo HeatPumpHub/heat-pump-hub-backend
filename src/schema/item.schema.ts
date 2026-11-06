@@ -1,5 +1,5 @@
 import { ItemCategory } from "@prisma/client";
-import { any, boolean, z, number, object, record, string } from "zod";
+import { boolean, z, number, object, record, string } from "zod";
 
 export const outdoorUnitSchema = object({
     nominalPower: number({
@@ -136,3 +136,8 @@ export type CreateItemInput = z.infer<typeof createItemSchema>
 export type UpdateItemInput = z.infer<typeof updateItemSchema>
 export type GetItemInput = z.infer<typeof getItemSchema>
 export type DeleteItemInput = z.infer<typeof deleteItemSchema>
+
+export type OutdoorUnitSpecs = z.infer<typeof outdoorUnitSchema>
+export type IndoorUnitSpecs = z.infer<typeof indoorUnitSchema>
+export type HotWaterCylinderSpecs = z.infer<typeof hotWaterCylinderSchema>
+export type BufferTankSpecs = z.infer<typeof bufferTankSchema>
