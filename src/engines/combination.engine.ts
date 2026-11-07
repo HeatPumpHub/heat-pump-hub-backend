@@ -1,5 +1,5 @@
 import { Item, ItemCategory } from "@prisma/client";
-import { OutdoorUnitSpecs } from "../schema/item.schema.js";
+import { HydroboxSpecs, OutdoorUnitSpecs } from "../schema/item.schema.js";
 import { MAX_POWER_OVERSIZING_RATIO } from "../constants/hvac.math.constants.js";
 
 
@@ -20,5 +20,26 @@ export function findCompatibleOutdoorUnits(
         const isWithinReasonableSize = specs.nominalPower <= requiredPower * MAX_POWER_OVERSIZING_RATIO
 
         return canCoverRequiredPower && isWithinReasonableSize
+    })
+}
+
+export function findCompatibleHydroboxes(
+    brandItems: Item[],
+    outdoorUnit: Item,
+): Item[] {
+
+    const outdoorUnitSpecs = outdoorUnit.categorySpecificCharacteristics as unknown as OutdoorUnitSpecs
+    const outdoorUnitRefrigerantType = outdoorUnitSpecs?.refrigerantType
+
+    return brandItems.filter(item => {
+        if(item.category !== ItemCategory.HYDROBOX) return false
+
+        const specs = item.categorySpecificCharacteristics as unknown as HydroboxSpecs
+
+        if(!specs) return false
+
+        if(outdoorUnitRefrigerantType && specs.refrigerantType !== outdoorUnitRefrigerantType) return false
+
+        return true
     })
 }

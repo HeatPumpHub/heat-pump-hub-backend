@@ -139,5 +139,6 @@ export type DeleteItemInput = z.infer<typeof deleteItemSchema>
 
 export type OutdoorUnitSpecs = z.infer<typeof outdoorUnitSchema>
 export type IndoorUnitSpecs = z.infer<typeof indoorUnitSchema>
+export type HydroboxSpecs = z.infer<typeof hydroboxSchema>
 export type HotWaterCylinderSpecs = z.infer<typeof hotWaterCylinderSchema>
 export type BufferTankSpecs = z.infer<typeof bufferTankSchema>
