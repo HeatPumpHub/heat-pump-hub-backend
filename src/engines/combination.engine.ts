@@ -1,6 +1,6 @@
 import { Item, ItemCategory } from "@prisma/client";
-import { HydroboxSpecs, OutdoorUnitSpecs } from "../schema/item.schema.js";
-import { MAX_POWER_OVERSIZING_RATIO } from "../constants/hvac.math.constants.js";
+import { HotWaterCylinderSpecs, HydroboxSpecs, OutdoorUnitSpecs } from "../schema/item.schema.js";
+import { DHW_VOLUME_RANGE_VALUES, MAX_POWER_OVERSIZING_RATIO } from "../constants/hvac.math.constants.js";
 
 
 export function findCompatibleOutdoorUnits(
@@ -43,3 +43,34 @@ export function findCompatibleHydroboxes(
         return true
     })
 }
+
+    export function findCompatibleHotWaterCylinders(
+        brandItems: Item[],
+        requiredVolume: number,
+        requiredMaterial?: string
+    ): Item[] | null {
+
+        if(!requiredVolume || requiredVolume <= 0) return null
+
+        const minimalVolume = requiredVolume * DHW_VOLUME_RANGE_VALUES.MINIMAL_VOLUME_MODIFIER
+        const maximalVolume = requiredVolume * DHW_VOLUME_RANGE_VALUES.MAXIMAL_VOLUME_MODIFIER
+
+        const compatibleCylinders = brandItems.filter(item => {
+
+            if(item.category !== ItemCategory.HOT_WATER_CYLINDER) return false
+
+            const specs = item.categorySpecificCharacteristics as unknown as HotWaterCylinderSpecs
+
+            if(!specs || typeof specs.volume !== 'number') return false
+
+            const isWithinVolumeRange = specs.volume >= minimalVolume && specs.volume <= maximalVolume
+
+            if(!isWithinVolumeRange) return false
+
+            if(requiredMaterial && (requiredMaterial !== specs.material)) return false
+
+            return true
+        })
+
+        return compatibleCylinders.length > 0 ? compatibleCylinders : null
+    }
