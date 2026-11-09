@@ -1,6 +1,7 @@
 import { Item, ItemCategory } from "@prisma/client";
-import { HotWaterCylinderSpecs, HydroboxSpecs, OutdoorUnitSpecs } from "../schema/item.schema.js";
-import { DHW_VOLUME_RANGE_VALUES, MAX_POWER_OVERSIZING_RATIO } from "../constants/hvac.math.constants.js";
+import { BufferTankSpecs, HotWaterCylinderSpecs, HydroboxSpecs, OutdoorUnitSpecs } from "../schema/item.schema.js";
+import { BUFFER_TANK_RANGE_VALUES, DHW_VOLUME_RANGE_VALUES, MAX_POWER_OVERSIZING_RATIO } from "../constants/hvac.math.constants.js";
+import { number } from "zod";
 
 
 export function findCompatibleOutdoorUnits(
@@ -73,4 +74,32 @@ export function findCompatibleHydroboxes(
         })
 
         return compatibleCylinders.length > 0 ? compatibleCylinders : null
+    }
+
+    export function findCompatibleBufferVessels(
+        brandItems: Item[],
+        requiredVolume: number
+    ): Item[] {
+
+        if(!requiredVolume || typeof requiredVolume !== 'number') return []
+
+        const minimalBufferVolume = requiredVolume * BUFFER_TANK_RANGE_VALUES.MINIMAL_VOLUME_MODIFIER
+        const maximalBufferVolume = requiredVolume * BUFFER_TANK_RANGE_VALUES.MAXIMAL_VOLUME_MODIFIER
+
+        const compatibleBufferVessels = brandItems.filter(item => {
+
+            if(item.category !== ItemCategory.BUFFER_TANK) return false
+
+            const specs = item.categorySpecificCharacteristics as unknown as BufferTankSpecs
+
+            if(!specs || typeof specs.volume !== 'number') return false
+
+            const isWithinVolumeRange = specs.volume >= minimalBufferVolume && specs.volume <= maximalBufferVolume
+
+            if(!isWithinVolumeRange) return false
+
+            return true
+        })
+
+        return compatibleBufferVessels
     }
