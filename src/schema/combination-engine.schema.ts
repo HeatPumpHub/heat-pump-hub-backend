@@ -1,3 +1,4 @@
+import { Item } from "@prisma/client";
 
 
 export interface ProjectRequirements {
@@ -9,8 +10,8 @@ export interface ProjectRequirements {
 
 export interface HvacCombination {
     brand: string;
-    outdoorUnit: Item;
-    hydrobox: Item;
+    outdoorUnit: Item | null;
+    hydrobox: Item | null;
     bufferTank: Item;
-    dhwTank?: Item | null;
+    hotWaterCylinder?: Item | null;
 }
