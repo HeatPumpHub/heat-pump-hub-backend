@@ -1,7 +1,7 @@
 import { Item } from "@prisma/client";
 
 
-export interface ProjectRequirements {
+export interface CombinationRequirements {
     requiredPower: number,
     requiredBufferTankVolume: number,
     requiredHotWaterCylinderVolume?: number,
