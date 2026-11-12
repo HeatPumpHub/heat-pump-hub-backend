@@ -1,7 +1,8 @@
 import { Item, ItemCategory } from "@prisma/client";
-import { BufferTankSpecs, HotWaterCylinderSpecs, HydroboxSpecs, OutdoorUnitSpecs } from "../schema/item.schema.js";
+import { BufferTankSpecs, HotWaterCylinderSpecs, HydroboxSpecs, IndoorUnitSpecs, OutdoorUnitSpecs } from "../schema/item.schema.js";
 import { BUFFER_TANK_RANGE_VALUES, DHW_VOLUME_RANGE_VALUES, MAX_POWER_OVERSIZING_RATIO } from "../constants/hvac.math.constants.js";
 import { number } from "zod";
+import { CombinationRequirements, HvacCombination } from "../schema/combination-engine.schema.js";
 
 
 export function findCompatibleOutdoorUnits(
@@ -24,13 +25,45 @@ export function findCompatibleOutdoorUnits(
     })
 }
 
+export function findCompatibleIndoorUnits(
+    brandItems: Item[],
+    outdoorUnit: Item,
+    requiredVolume: number
+): Item[] {
+
+    if(!requiredVolume || requiredVolume <= 0) return []
+
+    const minimalVolume = requiredVolume * DHW_VOLUME_RANGE_VALUES.MINIMAL_VOLUME_MODIFIER
+    const maximalVolume = requiredVolume * DHW_VOLUME_RANGE_VALUES.MAXIMAL_VOLUME_MODIFIER
+
+    const outdoorUnitSpecs = outdoorUnit.categorySpecificCharacteristics as unknown as OutdoorUnitSpecs
+    const outdoorUnitRefrigerantType = outdoorUnitSpecs.refrigerantType
+
+    return brandItems.filter(item => {
+        if(item.category !== ItemCategory.INDOOR_UNIT) return false
+
+        const specs = item.categorySpecificCharacteristics as unknown as IndoorUnitSpecs
+
+        if(outdoorUnitRefrigerantType && specs.refrigerantType !== outdoorUnitRefrigerantType) return false
+
+        if(!specs || typeof specs.hotWaterCylinderVolume !== 'number') return false
+
+        const isWithinVolumeRange = minimalVolume <= specs.hotWaterCylinderVolume && specs.hotWaterCylinderVolume <= maximalVolume
+
+        if(!isWithinVolumeRange) return false
+
+        return true
+    })
+
+}
+
 export function findCompatibleHydroboxes(
     brandItems: Item[],
     outdoorUnit: Item,
 ): Item[] {
 
     const outdoorUnitSpecs = outdoorUnit.categorySpecificCharacteristics as unknown as OutdoorUnitSpecs
-    const outdoorUnitRefrigerantType = outdoorUnitSpecs?.refrigerantType
+    const outdoorUnitRefrigerantType = outdoorUnitSpecs.refrigerantType
 
     return brandItems.filter(item => {
         if(item.category !== ItemCategory.HYDROBOX) return false
