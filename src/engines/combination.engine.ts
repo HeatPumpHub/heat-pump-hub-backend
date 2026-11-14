@@ -109,7 +109,7 @@ export function findCompatibleHydroboxes(
         return compatibleCylinders.length > 0 ? compatibleCylinders : null
     }
 
-    export function findCompatibleBufferVessels(
+    export function findCompatibleBufferTanks(
         brandItems: Item[],
         requiredVolume: number
     ): Item[] {
@@ -119,7 +119,7 @@ export function findCompatibleHydroboxes(
         const minimalBufferVolume = requiredVolume * BUFFER_TANK_RANGE_VALUES.MINIMAL_VOLUME_MODIFIER
         const maximalBufferVolume = requiredVolume * BUFFER_TANK_RANGE_VALUES.MAXIMAL_VOLUME_MODIFIER
 
-        const compatibleBufferVessels = brandItems.filter(item => {
+        const compatibleBufferTanks = brandItems.filter(item => {
 
             if(item.category !== ItemCategory.BUFFER_TANK) return false
 
@@ -134,5 +134,81 @@ export function findCompatibleHydroboxes(
             return true
         })
 
-        return compatibleBufferVessels
+        return compatibleBufferTanks
     }
+
+export function generateValidCombinations(
+    brandItemsMap: Map<string, Item[]>,
+    requirements: CombinationRequirements
+): HvacCombination[] {
+
+    const validCombinations: HvacCombination[] = []
+
+    for(const [brandName, brandItems] of brandItemsMap.entries()) {
+
+        const compatibleOutdoorUnits = findCompatibleOutdoorUnits(brandItems, requirements.requiredPower)
+        if(compatibleOutdoorUnits.length === 0) continue
+
+        const compatibleBufferTanks = findCompatibleBufferTanks(brandItems, requirements.requiredBufferTankVolume)
+        if(compatibleBufferTanks.length === 0) continue
+
+        let compatibleHotWaterCylinders: (Item | null)[] = [null]
+        
+        if(requirements.requiredHotWaterCylinderVolume && requirements.requiredHotWaterCylinderVolume > 0) {
+            const foundHotWaterCylinder = findCompatibleHotWaterCylinders(
+                brandItems,
+                requirements.requiredHotWaterCylinderVolume,
+                requirements.requiredHotWaterCylinderMaterial
+            )
+
+            if(foundHotWaterCylinder && foundHotWaterCylinder.length > 0) {
+                compatibleHotWaterCylinders = foundHotWaterCylinder
+            } else continue
+
+        }
+
+        for(const outdoorUnit of compatibleOutdoorUnits) {
+
+            const compatibleHydroboxes = findCompatibleHydroboxes(brandItems, outdoorUnit)
+
+            const requiredIndoorUnitVolume = requirements.requiredHotWaterCylinderVolume ?? 0
+            const compatibleIndoorUnits = findCompatibleIndoorUnits(brandItems, outdoorUnit, requiredIndoorUnitVolume)
+
+            if(compatibleHydroboxes.length > 0) {
+                for(const hydrobox of compatibleHydroboxes) {
+                    for(const bufferTank of compatibleBufferTanks) {
+                        for(const hotWaterCylinder of compatibleHotWaterCylinders) {
+
+                            validCombinations.push({
+                                brand: brandName,
+                                outdoorUnit,
+                                hydrobox,
+                                indoorUnit: null,
+                                bufferTank,
+                                hotWaterCylinder: hotWaterCylinder || null
+                            })
+                        }
+                    }
+                }
+            }
+
+            if(compatibleIndoorUnits.length > 0) {
+                for(const indoorUnit of compatibleIndoorUnits) {
+                    for(const bufferTank of compatibleBufferTanks) {
+
+                        validCombinations.push({
+                            brand: brandName,
+                            outdoorUnit,
+                            hydrobox: null,
+                            indoorUnit,
+                            bufferTank,
+                            hotWaterCylinder: null
+                        })
+                    }
+                }
+            }
+        }
+    }
+
+    return validCombinations
+}
