@@ -14,4 +14,5 @@ export interface HvacCombination {
     hydrobox: Item | null;
     bufferTank: Item;
     hotWaterCylinder?: Item | null;
+    indoorUnit: Item | null
 }
