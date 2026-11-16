@@ -22,9 +22,7 @@ const payload = {
         roleSpecificCharacteristics: record(string(), any(), {
             message: 'Role specific characteristics are required'
         }),
-        status: z.enum(Object.values(UserStatus) as [string, ...string[]], {
-            message: 'Status is required'
-        })
+        status: z.enum(Object.values(UserStatus) as [string, ...string[]]).optional()
     }),
 }
 
