@@ -37,7 +37,7 @@ export async function deleteUser(where: Prisma.UserWhereUniqueInput) {
   return prisma.user.update({
     where,
     data: {
-      status: 'ARCHIVED',
+      status: UserStatus.ARCHIVED,
     },
   });
 }
