@@ -25,3 +25,9 @@ export type installationType = keyof typeof installationTypeEnum
 export const BUFFER_TANK_CHARACTERISTICS = {
     LITTERS_PER_KW: 10
 } as const
+
+export const refrigerantTypeEnum = {
+    R410A: 'R410A',
+    R32: 'R32',
+    R290: 'R290',
+} as const
