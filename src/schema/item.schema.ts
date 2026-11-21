@@ -1,6 +1,6 @@
 import { ItemCategory } from "@prisma/client";
 import { boolean, z, number, object, record, string } from "zod";
-import { refrigerantTypeEnum } from "../constants/hvac.constants.js";
+import { electricalConnectionEnum, refrigerantTypeEnum } from "../constants/hvac.constants.js";
 
 export const outdoorUnitSchema = object({
     nominalPower: number({
@@ -9,8 +9,8 @@ export const outdoorUnitSchema = object({
     refrigerantType: z.enum(Object.values(refrigerantTypeEnum) as [string, ...string[]], {
         message: "Refrigerant type is required"
     }),
-    electricalConnection: string({
-        message: 'Electrical connection is required'
+    electricalConnection: z.enum(Object.values(electricalConnectionEnum) as [string, ...string[]], {
+        message: "Refrigerant type is required"
     })
 })
 
@@ -18,8 +18,8 @@ export const indoorUnitSchema = object({
     refrigerantType: z.enum(Object.values(refrigerantTypeEnum) as [string, ...string[]], {
         message: "Refrigerant type is required"
     }),
-    electricalConnection: string({
-        message: 'Electrical connection is required'
+    electricalConnection: z.enum(Object.values(electricalConnectionEnum) as [string, ...string[]], {
+        message: "Refrigerant type is required"
     }),
     hotWaterCylinderVolume: number().int().positive().optional(),
     hotWaterCylinderMaterial: string({
@@ -31,8 +31,8 @@ export const hydroboxSchema = object({
     refrigerantType: z.enum(Object.values(refrigerantTypeEnum) as [string, ...string[]], {
         message: "Refrigerant type is required"
     }),
-    electricalConnection: string({
-        message: 'Electrical connection is required'
+    electricalConnection: z.enum(Object.values(electricalConnectionEnum) as [string, ...string[]], {
+        message: "Refrigerant type is required"
     })
 })
 
@@ -42,8 +42,8 @@ export const hotWaterCylinderSchema = object({
         message: 'Material is required'
     }),
     electricalHeaterPower: number().int().positive(),
-    electricalConnection: string({
-        message: 'Electrical connection is required'
+    electricalConnection: z.enum(Object.values(electricalConnectionEnum) as [string, ...string[]], {
+        message: "Refrigerant type is required"
     })
 })
 

@@ -31,3 +31,8 @@ export const refrigerantTypeEnum = {
     R32: 'R32',
     R290: 'R290',
 } as const
+
+export const electricalConnectionEnum = {
+    SINGLE_PHASE_1x230V: 'SINGLE_PHASE_1x230V',
+    THREE_PHASE_3x400V: 'THREE_PHASE_3x400V'
+} as const
