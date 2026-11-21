@@ -11,13 +11,13 @@ export async function createBuildingAssessment(input: CreateBuildingAssessmentIn
 
     return prisma.buildingAssessment.create({
         data: {
-            ...input,
+            name: input.name,
+            manualInputData: input.manualInputData,
             manualCalculatedPower,
             manualCalculatedDHWVolume: calculatedDHWVolume,
-            user: {
-                connect: { id: userId }
-            }
+            userId
         }
+        
     })
 }
 

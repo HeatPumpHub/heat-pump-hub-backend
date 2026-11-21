@@ -6,7 +6,7 @@ import { createBuildingAssessment, deleteBuildingAssessment, getBuildingAssessme
 
 export const createBuildingAssessmentHandler = asyncHandler(
     async(req: Request<{}, {}, CreateBuildingAssessmentInput['body']>, res: Response) => {
-        const buildingAssessment = await createBuildingAssessment(req.body)
+        const buildingAssessment = await createBuildingAssessment(req.body, (req.body as any).userId)
         return res.status(201).json(buildingAssessment)
     }
 )
