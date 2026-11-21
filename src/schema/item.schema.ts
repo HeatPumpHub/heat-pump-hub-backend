@@ -1,12 +1,13 @@
 import { ItemCategory } from "@prisma/client";
 import { boolean, z, number, object, record, string } from "zod";
+import { refrigerantTypeEnum } from "../constants/hvac.constants.js";
 
 export const outdoorUnitSchema = object({
     nominalPower: number({
         message: 'Nominal power is required'
     }).positive('Nominal power must be positive'),
-    refrigerantType: string({
-        message: 'Refrigerant type is required'
+    refrigerantType: z.enum(Object.values(refrigerantTypeEnum) as [string, ...string[]], {
+        message: "Refrigerant type is required"
     }),
     electricalConnection: string({
         message: 'Electrical connection is required'
@@ -14,8 +15,8 @@ export const outdoorUnitSchema = object({
 })
 
 export const indoorUnitSchema = object({
-    refrigerantType: string({
-        message: 'Refrigerant type is required'
+    refrigerantType: z.enum(Object.values(refrigerantTypeEnum) as [string, ...string[]], {
+        message: "Refrigerant type is required"
     }),
     electricalConnection: string({
         message: 'Electrical connection is required'
@@ -27,8 +28,8 @@ export const indoorUnitSchema = object({
 })
 
 export const hydroboxSchema = object({
-    refrigerantType: string({
-        message: 'Refrigerant type is required'
+    refrigerantType: z.enum(Object.values(refrigerantTypeEnum) as [string, ...string[]], {
+        message: "Refrigerant type is required"
     }),
     electricalConnection: string({
         message: 'Electrical connection is required'
