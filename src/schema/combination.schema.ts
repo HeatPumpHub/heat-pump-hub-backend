@@ -1,5 +1,16 @@
-import z, { boolean, object, string } from "zod";
+import z, { array, boolean, number, object, string, uuid } from "zod";
 
+const combinationItemSchema = object({
+    itemId: uuid({
+        message: 'Invalid item id format'
+    }),
+    quantity: number({
+        message: 'Quantity is required'
+    })
+    .int('Quantity must be an integer')
+    .positive('Quantity must be positive number')
+    .default(1)
+})
 
 const payload = {
     body: object({
@@ -8,7 +19,8 @@ const payload = {
         }),
         isArchived: boolean({
             message: 'Is archived is required'
-        }).default(false)
+        }).default(false),
+        combinationItem: array(combinationItemSchema).min(1, 'Combination must contain at least one item')
     })
 }
 
