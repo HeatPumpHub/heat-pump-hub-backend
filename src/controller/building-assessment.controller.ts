@@ -13,7 +13,7 @@ export const createBuildingAssessmentHandler = asyncHandler(
 
 export const getBuildingAssessmentsHandler = asyncHandler(
     async (req: Request, res: Response) => {
-        const buildingAssessments = getBuildingAssessments()
+        const buildingAssessments = await getBuildingAssessments()
         return res.status(200).json(buildingAssessments)
     }
 )
