@@ -38,7 +38,18 @@ export async function updateCombination(
 ) {
     return prisma.combination.update({
         where,
-        data: data as Prisma.CombinationUpdateInput
+        data: {
+            ...data,
+            ...(data.combinationItems && {
+                combinationItems: {
+                    deleteMany: {},
+                    create: data.combinationItems
+                }
+            })
+        },
+        include: {
+            combinationItems: true
+        }
     })
 }
 
