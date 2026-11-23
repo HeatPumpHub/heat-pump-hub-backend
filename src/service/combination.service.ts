@@ -5,7 +5,15 @@ import { prisma } from "../utils/prisma.js";
 
 export async function createCombination(input: CreateCombinationInput['body']) {
     return prisma.combination.create({
-        data: input as Prisma.CombinationCreateInput
+        data: {
+            ...input,
+            combinationItems: {
+                create: input.combinationItems
+            }
+        },
+        include: {
+            combinationItems: true
+        }
     })
 }
 
