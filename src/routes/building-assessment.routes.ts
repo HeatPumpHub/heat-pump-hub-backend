@@ -30,7 +30,7 @@ buildingAssessmentRouter.patch(
 )
 
 buildingAssessmentRouter.delete(
-    '/id',
+    '/:id',
     validateResource(deleteBuildingAssessmentSchema),
     deleteBuildingAssessmentHandler
 )
