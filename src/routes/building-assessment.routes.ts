@@ -24,7 +24,7 @@ buildingAssessmentRouter.get(
 )
 
 buildingAssessmentRouter.patch(
-    '/id',
+    '/:id',
     validateResource(updateBuildingAssessmentSchema),
     updateBuildingAssessmentHandler
 )
