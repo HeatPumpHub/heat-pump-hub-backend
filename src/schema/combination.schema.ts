@@ -20,7 +20,7 @@ const payload = {
         isArchived: boolean({
             message: 'Is archived is required'
         }).default(false),
-        combinationItem: array(combinationItemSchema).min(1, 'Combination must contain at least one item')
+        combinationItems: array(combinationItemSchema).min(1, 'Combination must contain at least one item')
     })
 }
 
