@@ -4,7 +4,6 @@ import itemRouter from "./item.routes.js";
 import userRouter from "./user.routes.js";
 import buildingAssessmentRouter from "./building-assessment.routes.js";
 import combinationRouter from "./combination.routes.js";
-import combinationItemRouter from "./combination-item.routes.js";
 import offerRouter from "./offer.routes.js";
 
 const routes = Router()
@@ -14,7 +13,6 @@ routes.use('/items', itemRouter)
 routes.use('/users', userRouter);
 routes.use('/building-assessments', buildingAssessmentRouter)
 routes.use('/combination', combinationRouter),
-routes.use('/combination-item', combinationItemRouter)
 routes.use('/offer', offerRouter)
 
 export default routes
