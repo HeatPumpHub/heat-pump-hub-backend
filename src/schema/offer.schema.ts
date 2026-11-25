@@ -1,9 +1,18 @@
 import { OfferStatus } from "@prisma/client";
-import z, { any, date, number, object, record, string } from "zod";
+import z, { any, number, object, record, string, uuid } from "zod";
 
 
 export const payload = {
     body: object({
+        userId: uuid({
+            message: 'Valid user id is required'
+        }),
+        buildingAssessmentId: uuid({
+            message: 'Valid building assessment id is required'
+        }),
+        combinationId: uuid({
+            message: 'Valid combination id is required'
+        }),
         offerSnapshot: record(string(), any(), {
             message: 'Offer snapshot is required'
         }),
