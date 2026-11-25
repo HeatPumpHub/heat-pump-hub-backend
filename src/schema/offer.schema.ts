@@ -7,9 +7,12 @@ export const payload = {
         offerSnapshot: record(string(), any(), {
             message: 'Offer snapshot is required'
         }),
-        price: number({
-            message: 'Price is required'
-        }).positive('Price must be positive number'),
+        basePrice: number({
+            message: 'Base price is required'
+        }).positive('Base price must be positive number'),
+        totalPrice: number({
+        message: 'Total price is required'
+        }).positive('Total price must be positive number'),
         discount: number({
             message: 'Discount percent is required'
         }).int('Discount must be integer')

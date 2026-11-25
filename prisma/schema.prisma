@@ -132,7 +132,8 @@ model Offer {
   buildingAssessmentId String
   combinationId String
   offerSnapshot Json
-  price Decimal @db.Decimal(10, 2)
+  basePrice Decimal @db.Decimal(10, 2)
+  totalPrice Decimal @db.Decimal(10, 2)
   discount Int @default(0) @db.SmallInt
   status OfferStatus @default(ACTIVE)
   expirationDate DateTime
