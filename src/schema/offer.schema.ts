@@ -1,6 +1,39 @@
 import { OfferStatus } from "@prisma/client";
-import z, { any, number, object, record, string, uuid } from "zod";
+import z, { iso, number, object, string, uuid } from "zod";
 
+export const offerSnapshotItemSchema = object({
+    itemId: uuid({
+        message: 'Valid item id is required'
+    }),
+    name: string({
+        message: 'Item name is required'
+    }).trim()
+    .min(1),
+    quantity: number({
+        message: 'Quantity is required'
+    })
+    .int('Quantity must be an integer')
+    .positive('Quantity must be positive number'),
+    linePrice: number({
+        message: 'Line price is required'
+    }).nonnegative('Line price can not be negative'),
+    discount: number({
+        message: 'Item discount is required'
+    }).int('Discount must be integer')
+    .min(0)
+    .max(100)
+    .default(0),
+    totalPrice: number({
+        message: 'Line total price is required'
+    }).nonnegative('Line total price can not be negative')
+})
+
+export const offerSnapshotSchema = object({
+    items: z.array(offerSnapshotItemSchema).min(1, 'At least one item is required in snapshot combination'),
+    capturedAt: iso.datetime({
+        message: 'Snapshot timestamp is required'
+    })
+})
 
 export const payload = {
     body: object({
@@ -13,9 +46,7 @@ export const payload = {
         combinationId: uuid({
             message: 'Valid combination id is required'
         }),
-        offerSnapshot: record(string(), any(), {
-            message: 'Offer snapshot is required'
-        }),
+        offerSnapshot: offerSnapshotSchema,
         basePrice: number({
             message: 'Base price is required'
         }).positive('Base price must be positive number'),
@@ -25,12 +56,12 @@ export const payload = {
         discount: number({
             message: 'Discount percent is required'
         }).int('Discount must be integer')
-        .nonnegative('Discount must be positive number or zero')
-        .optional(),
+        .min(0)
+        .max(100)
+        .default(0),
         status: z.enum(Object.values(OfferStatus) as [string, ...string[]], {
             message: 'Status is required'
-        }).default(OfferStatus.ACTIVE)
-        .optional(),
+        }).default(OfferStatus.ACTIVE),
         expirationDate: z.coerce.date({
             message: 'Expiration date is required'
         })
